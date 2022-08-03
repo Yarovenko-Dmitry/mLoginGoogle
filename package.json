@@ -10,11 +10,14 @@
     "test": "jest",
     "lint": "eslint .",
     "pods": "cd ios && pod install",
-    "gradlew": "cd android && ./gradlew clean && ./gradlew installDebug"
+    "gradlew": "cd android && ./gradlew clean && ./gradlew installDebug",
+    "kill-port" : "npx kill-port 8081"
   },
   "dependencies": {
+    "@react-native-google-signin/google-signin": "^8.0.0",
     "react": "18.0.0",
-    "react-native": "0.69.3"
+    "react-native": "0.69.3",
+    "react-native-config": "^1.4.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
