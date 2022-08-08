@@ -1,26 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {Button, SafeAreaView, StyleSheet} from 'react-native';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {
-  GoogleSignin,
-  GoogleSigninButton,
-} from '@react-native-google-signin/google-signin';
-import {REACT_APP_IOS_CLIENT_ID, REACT_APP_ANDROID_CLIENT_ID} from './envConfig';
+  REACT_APP_ANDROID_CLIENT_ID,
+  REACT_APP_IOS_CLIENT_ID,
+} from './envConfig';
+import {MainScreen} from './src/csreens/MainScreen';
+import {AuthScreen} from './src/csreens/AuthScreen';
 
 const App = () => {
-  const [isAuth, setIsAuth] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
+  const [isLogged, setIsLogged] = useState(false);
 
-  const handleUserAuthorization = (
-    isAuthValue,
-    user,
-  ) => {
-    console.log(" handleUserAuthorization :");
-    console.log(" user :", user);
-    console.log(" isAuthValue :", isAuthValue);
-    console.log(" *********** :");
+  const handleUserAuthorization = (isAuthValue, user) => {
+    console.log(' handleUserAuthorization :');
+    console.log(' user :', user);
+    console.log(' isAuthValue :', isAuthValue);
+    console.log(' *********** :');
 
-    setUserInfo(user);
-    setIsAuth(isAuthValue);
+    setIsLogged(isAuthValue);
   };
 
   const onSignInPress = async () => {
@@ -45,32 +41,17 @@ const App = () => {
   };
 
   useEffect(() => {
-    GoogleSignin.configure({iosClientId: REACT_APP_IOS_CLIENT_ID,
-      webClientId: REACT_APP_ANDROID_CLIENT_ID});
+    GoogleSignin.configure({
+      iosClientId: REACT_APP_IOS_CLIENT_ID,
+      webClientId: REACT_APP_ANDROID_CLIENT_ID,
+    });
   }, []);
 
-  console.log(userInfo);
-
-  return (
-    <SafeAreaView style={styles.safeArea}>
-      <GoogleSigninButton
-        style={{width: 192, height: 48}}
-        size={GoogleSigninButton.Size.Wide}
-        color={GoogleSigninButton.Color.Dark}
-        onPress={onSignInPress}
-      />
-
-      {isAuth && <Button title="SignOut" onPress={onSignOutPress} />}
-    </SafeAreaView>
-  );
+  if (isLogged) {
+    return <MainScreen onSignOutPress={onSignOutPress} />;
+  } else {
+    return <AuthScreen onSignInPress={onSignInPress} />;
+  }
 };
 
 export default App;
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
